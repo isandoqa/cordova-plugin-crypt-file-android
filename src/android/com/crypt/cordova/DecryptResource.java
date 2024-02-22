@@ -8,6 +8,7 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaResourceApi;
 import org.apache.cordova.LOG;
 import org.apache.cordova.CordovaPreferences;
+import com.t2.AvailoPrimum.BuildConfig;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -25,8 +26,8 @@ public class DecryptResource extends CordovaPlugin {
 
   private static final String TAG = "DecryptResource";
 
-  private static final String CRYPT_KEY = "";
-  private static final String CRYPT_IV = "";
+  private static final String CRYPT_KEY = BuildConfig.CRYPT_KEY;
+  private static final String CRYPT_IV = BuildConfig.CRYPT_IV;
 
   private static final String[] CRYPT_FILES = {
     ".htm",

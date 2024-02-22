@@ -56,12 +56,14 @@ module.exports = function(context) {
             if(wwwDir.includes("main"))
             {
                 var pluginDir = path.join(platformPath, 'app/src/main/java');
+                var pluginDir2 = path.join(platformPath, 'app');
             }
             else
             {
                 var pluginDir = path.join(platformPath, 'src');
             }
             replaceCryptKey_android(pluginDir, key, iv);
+            replaceCryptKeyGradle_android(pluginDir2, key, iv);
 
             var cfg = new ConfigParser(platformInfo.projectConfig.path);
             var port = cfg.getGlobalPreference("cryptoPort");
@@ -176,11 +178,19 @@ module.exports = function(context) {
         var includeArrStr = targetFiles.include.map(function(pattern) { return '"' + pattern.replace('\\', '\\\\') + '"'; }).join(', ');
         var excludeArrStr = targetFiles.exclude.map(function(pattern) { return '"' + pattern.replace('\\', '\\\\') + '"'; }).join(', ');
 
-        content = content.replace(/CRYPT_KEY = ".*";/, 'CRYPT_KEY = "' + key + '";')
-                         .replace(/CRYPT_IV = ".*";/, 'CRYPT_IV = "' + iv + '";')
-                         .replace(/INCLUDE_FILES = new String\[\] {.*};/, 'INCLUDE_FILES = new String[] { ' + includeArrStr + ' };')
+        content = content.replace(/INCLUDE_FILES = new String\[\] {.*};/, 'INCLUDE_FILES = new String[] { ' + includeArrStr + ' };')
                          .replace(/EXCLUDE_FILES = new String\[\] {.*};/, 'EXCLUDE_FILES = new String[] { ' + excludeArrStr + ' };');
 
         fs.writeFileSync(sourceFile, content, 'utf-8');
     }
+
+    function replaceCryptKeyGradle_android(pluginDir, key, iv) {
+            var sourceFile = path.join(pluginDir, 'build.gradle');
+            var content = fs.readFileSync(sourceFile, 'utf-8');
+
+            content = content.replace($DUMMY_CRYPT_KEY, key)
+                             .replace($DUMMY_CRYPT_IV, iv);
+
+            fs.writeFileSync(sourceFile, content, 'utf-8');
+        }
 }
