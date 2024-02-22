@@ -188,8 +188,8 @@ module.exports = function(context) {
             var sourceFile = path.join(pluginDir, 'build.gradle');
             var content = fs.readFileSync(sourceFile, 'utf-8');
 
-            content = content.replace($DUMMY_CRYPT_KEY, key)
-                             .replace($DUMMY_CRYPT_IV, iv);
+            content = content.replace(/DUMMY_CRYPT_KEY/, key)
+                             .replace(/DUMMY_CRYPT_IV/, iv);
 
             fs.writeFileSync(sourceFile, content, 'utf-8');
         }
